@@ -10,7 +10,7 @@ const routes = [
     component: () => import('./ui/element-plus/views/ComponentProviderSettings.vue'),
     meta: {
       title: '微信服务商', requiresAuth: true, module: 'wechat-component',
-      menu: { section: MENU_SECTION, label: '微信服务商', icon: 'ChatDotRound', perm: 'setting.view' },
+      menu: { section: MENU_SECTION, label: '微信服务商', icon: 'ChatDotRound', perm: 'platform.setting.view' },
     },
   },
 ]
