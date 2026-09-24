@@ -48,10 +48,10 @@ CREATE TABLE `wechat_authorizations` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`authorization_id`),
-  UNIQUE KEY `wechat_authorizations_tenant_unique` (`tenant_id`),
   UNIQUE KEY `wechat_authorizations_appid_unique` (`authorizer_appid`),
   KEY `wechat_authorizations_provider_index` (`component_provider_id`),
-  KEY `wechat_authorizations_status_index` (`status`)
+  KEY `wechat_authorizations_status_index` (`status`),
+  UNIQUE KEY `wechat_authorizations_tenant_type_unique` (`tenant_id`, `authorizer_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
