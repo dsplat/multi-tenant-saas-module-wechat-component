@@ -3,11 +3,19 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use MultiTenantSaas\Support\MySqlOnlyMigration;
 
 return new class extends Migration
 {
     public function up(): void
     {
+        // MySQL 专有 DDL：非 MySQL 驱动下抛明确异常，或按开关跳过。
+        // 详见 MultiTenantSaas\Support\MySqlOnlyMigration 与
+        // docs/zh/deployment/migration-drivers.md。
+        if (MySqlOnlyMigration::skip(__FILE__)) {
+            return;
+        }
+
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
 
         // Table: wechat_component_providers —— 微信第三方平台组件凭证（平台级，tenant_id=null）
@@ -60,6 +68,13 @@ SQL);
 
     public function down(): void
     {
+        // MySQL 专有 DDL：非 MySQL 驱动下抛明确异常，或按开关跳过。
+        // 详见 MultiTenantSaas\Support\MySqlOnlyMigration 与
+        // docs/zh/deployment/migration-drivers.md。
+        if (MySqlOnlyMigration::skip(__FILE__)) {
+            return;
+        }
+
         Schema::dropIfExists('wechat_authorizations');
         Schema::dropIfExists('wechat_component_providers');
     }
