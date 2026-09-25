@@ -1,6 +1,5 @@
 {
   "name": "dsplat/multi-tenant-saas-module-wechat-component",
-  "version": "1.0.0",
   "description": "微信第三方平台服务商（S 端）- 组件凭证管理、component_verify_ticket 回调、授权发起/入库、authorizer_token 缓存",
   "type": "library",
   "license": "MIT",
