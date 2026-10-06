@@ -2,10 +2,10 @@
 
 namespace MultiTenantSaas\Modules\WechatComponent\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use MultiTenantSaas\Http\Controllers\BaseController;
 use MultiTenantSaas\Modules\WechatComponent\Models\Authorization;
 use MultiTenantSaas\Modules\WechatComponent\Models\ComponentProvider;
 use MultiTenantSaas\Modules\WechatComponent\Services\WechatComponentService;
@@ -17,7 +17,7 @@ use MultiTenantSaas\Scopes\TenantScope;
  * 管理组件凭证（wechat_component_providers 系统级记录）、连接测试、已授权租户列表。
  * 权限：沿用 setting.view / setting.update（与系统设置一致，同 AdminServiceProviderController）。
  */
-class AdminComponentProviderController extends Controller
+class AdminComponentProviderController extends BaseController
 {
     /** component_secret / encoding_aes_key 掩码（列表返回/回存跳过，同 SystemSetting 安全模式） */
     private const SECRET_MASK = '********';
