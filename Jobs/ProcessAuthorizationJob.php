@@ -8,6 +8,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use MultiTenantSaas\Concerns\HasTaskAuthEnvelope;
+use MultiTenantSaas\Context\CarriesTaskAuthEnvelope;
 use MultiTenantSaas\Context\TenantContext;
 use MultiTenantSaas\Modules\WechatComponent\Models\Authorization;
 use MultiTenantSaas\Modules\WechatComponent\Models\ComponentProvider;
@@ -23,9 +25,9 @@ use MultiTenantSaas\Modules\WechatComponent\Services\WechatComponentService;
  * tries=1：auth_code 一次性且 600 秒有效，重试无意义（失败时微信侧
  * 账号已授权，可重新发起授权或人工处理）。
  */
-class ProcessAuthorizationJob implements ShouldQueue
+class ProcessAuthorizationJob implements CarriesTaskAuthEnvelope, ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, HasTaskAuthEnvelope, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 1;
 

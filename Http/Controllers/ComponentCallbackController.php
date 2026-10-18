@@ -5,6 +5,7 @@ namespace MultiTenantSaas\Modules\WechatComponent\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
+use MultiTenantSaas\Context\TaskAuthEnvelope;
 use MultiTenantSaas\Modules\WechatComponent\Jobs\ProcessAuthorizationJob;
 use MultiTenantSaas\Modules\WechatComponent\Services\WechatComponentService;
 use MultiTenantSaas\Support\Wechat\WechatCrypto;
@@ -155,7 +156,13 @@ class ComponentCallbackController extends Controller
         $provider = $this->resolveProvider();
 
         // 立即派发异步换码入库（auth_code 一次性、600 秒有效）
-        ProcessAuthorizationJob::dispatch($authCode, $state, $tenantId, (int) $provider->component_provider_id);
+        // 渠道回跳（一次性 state 恢复租户）：channel service 信封，不冒充用户/系统
+        ProcessAuthorizationJob::dispatch($authCode, $state, $tenantId, (int) $provider->component_provider_id)
+            ->withTaskAuthEnvelope(TaskAuthEnvelope::forChannelService(
+                'wechat-component.authorization',
+                (int) $tenantId,
+                'wechat-component.authorize-callback',
+            ));
 
         Log::info('[WechatComponent] 收到授权回跳，已派发换码 Job', [
             'tenant_id' => $tenantId,

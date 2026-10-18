@@ -2,6 +2,7 @@
 
 namespace MultiTenantSaas\Modules\WechatComponent;
 
+use MultiTenantSaas\Contracts\ExecutionSubjectStateContract;
 use MultiTenantSaas\Modules\Contracts\ModuleServiceProvider;
 
 /**
@@ -25,6 +26,11 @@ class WechatComponentServiceProvider extends ModuleServiceProvider
 
     protected function bootModule(): void
     {
+        if ($this->app->bound(ExecutionSubjectStateContract::class)) {
+            $this->app->make(ExecutionSubjectStateContract::class)
+                ->trustService('wechat-component.authorization');
+        }
+
         $this->registerComponentCallbackRoutes();
     }
 
