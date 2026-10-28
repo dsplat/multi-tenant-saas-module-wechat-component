@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use MultiTenantSaas\Context\ServiceDomain;
 use MultiTenantSaas\Exceptions\ServiceUnavailableException;
 use MultiTenantSaas\Modules\Auth\Services\Concerns\ManagesOAuthState;
 use MultiTenantSaas\Modules\WechatComponent\Models\Authorization;
@@ -610,13 +611,13 @@ class WechatComponentService
     }
 
     /**
-     * 平台统一回调域（OAUTH_CALLBACK_DOMAIN），未配置回退 app.url
+     * 平台集成服务域（第三方平台授权通知 / 消息与事件接入），未配置回退 app.url
      */
     protected function callbackDomain(): string
     {
-        $domain = (string) config('auth.oauth.callback_domain', '');
+        $domain = app(ServiceDomain::class)->host(ServiceDomain::SERVICE_INTEGRATION);
 
-        if ($domain !== '') {
+        if ($domain !== null) {
             return 'https://' . $domain;
         }
 
